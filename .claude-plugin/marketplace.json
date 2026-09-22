@@ -1,0 +1,14 @@
+{
+  "name": "claude-horizon-animation",
+  "owner": {
+    "name": "misbahsy"
+  },
+  "description": "The horizon-reel skill: short launch videos in the collage horizon style of Claude's model-launch films.",
+  "plugins": [
+    {
+      "name": "horizon-reel",
+      "source": "./",
+      "description": "Short launch videos in the collage horizon style of Claude's model-launch films, from public-domain images and canvas drawing."
+    }
+  ]
+}

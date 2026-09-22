@@ -1,0 +1,259 @@
+{
+ "_comment": "Claude Opus 5.5, day 0 on LiteLLM (docs PR BerriAI/litellm-docs#1633). Run source.sh from this folder to fetch media/, then render. Every photograph is public domain or CC0; see media/credits.json after sourcing.",
+ "size": [
+  1920,
+  1080
+ ],
+ "fps": 30,
+ "top": 0.52,
+ "curve": 0.95,
+ "push": 0.045,
+ "grain": 0.16,
+ "type": {
+  "family": "Source Serif 4",
+  "weight": 500,
+  "size": 76,
+  "step": 0.28,
+  "grow": 0.3
+ },
+ "shots": [
+  {
+   "dur": 480,
+   "kind": "photo",
+   "src": "media/aic-10930.jpg",
+   "fit": "object",
+   "width": 1.35,
+   "sky": "#0f0f10",
+   "shape": "ellipse"
+  },
+  {
+   "dur": 460,
+   "kind": "photo",
+   "src": "media/commons-82866612.jpg",
+   "fit": "object",
+   "width": 1.2,
+   "threshold": 40,
+   "sky": "#ebe6db"
+  },
+  {
+   "dur": 440,
+   "kind": "chalk",
+   "sky": "#3f6d9c"
+  },
+  {
+   "dur": 420,
+   "kind": "photo",
+   "src": "media/aic-2583.jpg",
+   "fit": "object",
+   "width": 1.35,
+   "sky": "#2f8f86"
+  },
+  {
+   "dur": 400,
+   "kind": "photo",
+   "src": "media/aic-3866.jpg",
+   "fit": "object",
+   "flip": "v",
+   "width": 1.3,
+   "keepBackdrop": true,
+   "treat": {
+    "map": [
+     "#0b0b0b",
+     "#f3efe6"
+    ],
+    "invert": true,
+    "contrast": 1.6
+   },
+   "word": "Day 0",
+   "wordLift": 22
+  },
+  {
+   "dur": 390,
+   "kind": "photo",
+   "src": "media/nasa-s32-72-050.jpg",
+   "fit": "cover",
+   "dome": false,
+   "focus": [
+    0.5,
+    0.32
+   ],
+   "word": "Day 0",
+   "ink": "#f6f2ea"
+  },
+  {
+   "dur": 380,
+   "kind": "photo",
+   "src": "media/met-6000.jpg",
+   "fit": "object",
+   "width": 1.3,
+   "sky": "#8e3590",
+   "word": "Day 0",
+   "shape": "ellipse"
+  },
+  {
+   "dur": 360,
+   "kind": "crayon",
+   "sky": "#a8c6ee",
+   "word": "support for"
+  },
+  {
+   "dur": 350,
+   "kind": "photo",
+   "src": "media/commons-82866600.jpg",
+   "fit": "cover",
+   "edge": "scallop",
+   "edgeAmp": 10,
+   "sky": "#4a1656",
+   "treat": {
+    "map": [
+     "#170629",
+     "#c21f74",
+     "#ff9d1c",
+     "#3ce6a6"
+    ],
+    "steps": 5,
+    "contrast": 1.2
+   },
+   "word": "support for"
+  },
+  {
+   "dur": 340,
+   "kind": "photo",
+   "src": "media/aic-47947.jpg",
+   "fit": "cover",
+   "edge": "rough",
+   "zoom": 1.6,
+   "focus": [
+    0.4,
+    0.5
+   ],
+   "sky": "#2b4a78",
+   "word": "support for"
+  },
+  {
+   "dur": 320,
+   "kind": "photo",
+   "src": "media/met-204533.jpg",
+   "fit": "object",
+   "width": 1.3,
+   "sky": "#101010",
+   "treat": {
+    "map": [
+     "#1a0c12",
+     "#d6246e",
+     "#ffd23a"
+    ],
+    "steps": 4,
+    "contrast": 1.3
+   },
+   "word": "Claude Opus 5.5",
+   "shape": "ellipse"
+  },
+  {
+   "dur": 310,
+   "kind": "scribble",
+   "sky": "#e6d9bd",
+   "word": "Claude Opus 5.5"
+  },
+  {
+   "dur": 300,
+   "kind": "photo",
+   "src": "media/commons-539128.jpg",
+   "fit": "cover",
+   "edge": "scallop",
+   "zoom": 1.4,
+   "focus": [
+    0.5,
+    0.55
+   ],
+   "sky": "#f1ebdd",
+   "word": "Claude Opus 5.5"
+  },
+  {
+   "dur": 290,
+   "kind": "cutout",
+   "sky": "#efe9dd",
+   "word": "Claude Opus 5.5"
+  },
+  {
+   "dur": 280,
+   "kind": "photo",
+   "src": "media/nasa-as12-47-6891.jpg",
+   "fit": "cover",
+   "edge": "ridge",
+   "zoom": 1.3,
+   "focus": [
+    0.5,
+    0.75
+   ],
+   "sky": "#050505",
+   "treat": {
+    "contrast": 1.35,
+    "sat": 0
+   },
+   "word": "Claude Opus 5.5"
+  },
+  {
+   "dur": 270,
+   "kind": "compass",
+   "sky": "#f2ede2",
+   "word": "Claude Opus 5.5"
+  },
+  {
+   "dur": 270,
+   "kind": "photo",
+   "src": "media/aic-6581.jpg",
+   "fit": "object",
+   "width": 1.3,
+   "sky": "#d9c89c",
+   "treat": {
+    "map": [
+     "#1b1030",
+     "#2f56c8",
+     "#f0e6cf"
+    ],
+    "steps": 4
+   },
+   "word": "Claude Opus 5.5",
+   "shape": "ellipse"
+  },
+  {
+   "dur": 270,
+   "kind": "photo",
+   "src": "media/commons-82866570.jpg",
+   "fit": "object",
+   "width": 1.6,
+   "sky": "#0d0d0d",
+   "word": "Claude Opus 5.5",
+   "rotate": -90
+  },
+  {
+   "dur": 1300,
+   "kind": "card",
+   "lockup": "litellm",
+   "size": 60,
+   "limb": {
+    "from": 0.95,
+    "curve": 1.1
+   }
+  },
+  {
+   "dur": 1900,
+   "kind": "card",
+   "lockup": "litellm",
+   "size": 60,
+   "y": [
+    0.5,
+    0.34
+   ],
+   "ySpan": 0.8,
+   "limb": {
+    "from": 0.97,
+    "to": 0.66,
+    "span": 0.85,
+    "curve": 1.1,
+    "warm": true
+   }
+  }
+ ]
+}

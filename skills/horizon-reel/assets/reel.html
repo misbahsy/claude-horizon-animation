@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>horizon reel</title>
+<style>
+  /* Fonts are local so a render is identical on every machine. The engine reads
+     family names from film.type; these are the registered ones. */
+  @font-face { font-family: 'Source Serif 4'; src: url(fonts/source-serif-4-variable.woff2) format('woff2'); font-weight: 200 900; }
+  @font-face { font-family: 'Newsreader'; src: url(fonts/newsreader-variable.woff2) format('woff2'); font-weight: 200 800; }
+  @font-face { font-family: 'Geist'; src: url(fonts/geist-variable.woff2) format('woff2'); font-weight: 100 900; }
+  html, body { margin: 0; background: #000; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="reel"></canvas>
+<script src="engine.js"></script>
+<script>
+  Reel.boot(new URLSearchParams(location.search).get('film')).catch((e) => {
+    window.reelError = String(e && e.stack || e);
+    console.error(window.reelError);
+  });
+</script>
+</body>
+</html>

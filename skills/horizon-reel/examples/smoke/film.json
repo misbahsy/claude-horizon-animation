@@ -1,0 +1,13 @@
+{
+  "_comment": "Setup smoke test: drawn shots and a card only, so it renders with no downloads.",
+  "size": [960, 540],
+  "fps": 12,
+  "top": 0.52,
+  "curve": 0.95,
+  "type": { "size": 40 },
+  "shots": [
+    { "dur": 500, "kind": "chalk", "word": "horizon" },
+    { "dur": 500, "kind": "cells", "word": "horizon" },
+    { "dur": 1000, "kind": "card", "lockup": "litellm", "size": 32, "limb": { "from": 0.97, "to": 0.7, "warm": true } }
+  ]
+}

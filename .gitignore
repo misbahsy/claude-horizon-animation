@@ -1,0 +1,15 @@
+# Per-machine installs and render output
+node_modules/
+out/
+*.mp4
+*.mov
+
+# Film projects keep their images out of git; scripts/lock.mjs writes a source.sh instead
+media/
+stills.png
+candidates*.png
+
+# Local config and secrets
+.env
+.env.*
+.DS_Store

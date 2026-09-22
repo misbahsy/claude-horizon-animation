@@ -1,0 +1,9 @@
+{
+  "name": "horizon-reel",
+  "private": true,
+  "type": "module",
+  "description": "Canvas film engine and renderer for horizon-cut launch reels. Self-contained; not part of any site build.",
+  "dependencies": {
+    "playwright-core": "^1.63.0"
+  }
+}
