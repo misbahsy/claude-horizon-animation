@@ -13,3 +13,4 @@ candidates*.png
 .env
 .env.*
 .DS_Store
+*.wav

@@ -1,7 +1,7 @@
 {
-  "name": "horizon-reel",
-  "description": "Short launch videos in the collage horizon style of Claude's model-launch films, from public-domain images and canvas drawing.",
-  "version": "0.1.0",
+  "name": "animation-skills",
+  "description": "horizon-reel makes collage-horizon launch reels in the style of Claude's model-launch films; sketch-to-sim turns a pencil sketch of a machine into a physics-simulated film with a playable sandbox.",
+  "version": "0.2.0",
   "author": { "name": "misbahsy" },
   "repository": "https://github.com/misbahsy/claude-horizon-animation"
 }

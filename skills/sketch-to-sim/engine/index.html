@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paper Machine</title>
+<script type="importmap">
+{ "imports": {
+  "three": "/engine/node_modules/three/build/three.module.js",
+  "three/addons/": "/engine/node_modules/three/examples/jsm/",
+  "rapier": "/engine/node_modules/@dimforge/rapier3d-compat/rapier.mjs"
+} }
+</script>
+<style>
+  @font-face { font-family: 'Geist'; src: url(/engine/fonts/geist-variable.woff2) format('woff2'); font-weight: 100 900; }
+  @font-face { font-family: 'Geist Mono'; src: url(/engine/fonts/geist-mono-variable.woff2) format('woff2'); font-weight: 100 900; }
+  @font-face { font-family: 'Gochi Hand'; src: url(/engine/fonts/gochi-hand.woff2) format('woff2'); }
+  @font-face { font-family: 'Caveat'; src: url(/engine/fonts/caveat.woff2) format('woff2'); font-weight: 400 700; }
+  :root { --ink: #1f1c19; --muted: #6d665d; --line: rgba(31,28,25,0.1); --brown: #4a3526; --blue: #2d4fb0; --note: #2f3348; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #1a1612; font-family: 'Geist', system-ui, sans-serif; color: var(--ink); }
+  #stage { position: fixed; inset: 0; }
+  #stage canvas { display: block; width: 100%; height: 100%; }
+  #ui { position: fixed; inset: 0; pointer-events: none; }
+  #ui * { box-sizing: border-box; }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+
+  /* grade: the replay's darker, vignetted look */
+  #grade { position: absolute; inset: 0; opacity: 0; background: radial-gradient(ellipse at 55% 45%, rgba(0,0,0,0) 35%, rgba(8,6,4,0.55) 100%), rgba(10,8,6,0.18); }
+
+  /* intro and end card */
+  #card { position: absolute; left: 22px; bottom: 22px; width: 318px; padding: 14px 16px 16px; border-radius: 12px;
+    background: rgba(248,246,242,0.95); box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 10px 30px rgba(0,0,0,0.16); pointer-events: auto; }
+  #card .top { display: flex; justify-content: space-between; font-size: 9.5px; letter-spacing: 0.14em; color: #8c857b; text-transform: uppercase; }
+  #card h1 { margin: 10px 0 4px; font-size: 21px; font-weight: 600; letter-spacing: -0.015em; }
+  #card p { margin: 0 0 13px; font-size: 12.5px; color: var(--muted); }
+  #card .btns { display: flex; gap: 8px; }
+  .btn { font: 500 12.5px 'Geist', sans-serif; border-radius: 7px; padding: 8px 13px; border: 1px solid transparent; cursor: pointer; }
+  .btn.primary { background: var(--brown); color: #fff; }
+  .btn.primary.pressed { background: #2f2118; }
+  .btn.ghost { background: #efebe5; color: var(--ink); border-color: #e0d9cf; }
+
+  /* chapter bar */
+  #bar { position: absolute; left: 18px; right: 18px; bottom: 14px; height: 36px; border-radius: 8px; opacity: 0;
+    background: rgba(248,246,242,0.95); box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.12); }
+  #track { position: absolute; left: 34px; right: 250px; top: 18px; height: 1px; background: rgba(31,28,25,0.14); }
+  #fill { position: absolute; left: 0; top: 0; height: 1px; background: var(--blue); width: 0; }
+  #dot { position: absolute; top: -3.5px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--blue); left: 0; }
+  .chap { position: absolute; top: -12px; font: 500 10px 'Geist Mono', monospace; letter-spacing: 0.14em; color: #9b948a; white-space: nowrap; }
+  .chap.on { color: var(--ink); }
+  .tick { position: absolute; top: -3px; width: 1px; height: 7px; background: rgba(31,28,25,0.18); }
+  #clock { position: absolute; right: 64px; top: 11px; font: 500 11px 'Geist Mono', monospace; color: #8c857b; letter-spacing: 0.04em; }
+  #clock b { color: var(--blue); font-weight: 600; margin-right: 10px; letter-spacing: 0.12em; font-size: 9.5px; }
+  #bar .icon { position: absolute; top: 10px; width: 16px; height: 16px; color: #6d665d; }
+
+  /* measurement tags and handwritten notes */
+  .tag { position: absolute; transform: translate(-50%, -50%); padding: 4px 9px; border-radius: 4px; font: 500 15px 'Geist Mono', monospace;
+    color: #6a645b; background: rgba(255,255,255,0.86); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 1px 3px rgba(0,0,0,0.08); white-space: nowrap; }
+  .note { position: absolute; font: 36px 'Gochi Hand', cursive; color: var(--note); white-space: nowrap; transform: translate(-50%, -50%); }
+  .note.blue { color: var(--blue); }
+  #svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  #badge { position: absolute; left: 22px; top: 20px; padding: 4px 8px; border-radius: 4px; font: 500 12px 'Geist Mono', monospace; color: #2a2622; background: rgba(255,255,255,0.88); opacity: 0; }
+
+  #cursor { position: absolute; left: 0; top: 0; width: 20px; height: 20px; opacity: 0; filter: drop-shadow(0 1px 1.5px rgba(0,0,0,0.35)); }
+
+  /* build it yourself */
+  #panel { position: absolute; right: 16px; top: 14px; bottom: 14px; width: 298px; padding: 14px 14px 12px; border-radius: 12px; opacity: 0;
+    background: rgba(248,246,242,0.96); box-shadow: 0 1px 2px rgba(0,0,0,0.07), 0 12px 32px rgba(0,0,0,0.16); display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+  #panel.live { pointer-events: auto; }
+  #panel .ph { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14.5px; }
+  #panel .stats { display: grid; grid-template-columns: repeat(4, 1fr); overflow: hidden; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,0.6); }
+  #panel .stats > div { padding: 8px 8px 7px; border-left: 1px solid var(--line); }
+  #panel .stats > div:first-child { border-left: 0; }
+  #panel .stats b { font: 500 19px 'Geist Mono', monospace; letter-spacing: -0.02em; }
+  #panel .stats i { font: 10px 'Geist Mono', monospace; color: #9b948a; font-style: normal; margin-left: 2px; }
+  #panel .stats label { display: block; margin-top: 2px; font: 500 9px 'Geist Mono', monospace; letter-spacing: 0.12em; color: #8c857b; }
+  #panel .sec { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+  #panel .row { display: flex; justify-content: space-between; font: 500 10px 'Geist Mono', monospace; letter-spacing: 0.12em; color: #8c857b; }
+  #panel .row span { color: var(--ink); letter-spacing: 0.02em; font-size: 11.5px; }
+  #panel .ends { display: flex; justify-content: space-between; font: 500 9px 'Geist Mono', monospace; letter-spacing: 0.12em; color: #9b948a; margin-top: -3px; }
+  .slider { position: relative; height: 18px; }
+  .slider .tr { position: absolute; left: 0; right: 0; top: 8.5px; height: 1.5px; background: rgba(31,28,25,0.13); border-radius: 1px; }
+  .slider .fl { position: absolute; left: 0; top: 8.5px; height: 1.5px; background: var(--blue); border-radius: 1px; }
+  .slider .th { position: absolute; top: 1px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: #fff; border: 1.5px solid #2d4fb0; box-shadow: 0 1px 3px rgba(0,0,0,0.18); }
+  .slider.active .th { box-shadow: 0 0 0 4px rgba(45,79,176,0.18), 0 1px 3px rgba(0,0,0,0.18); }
+  #panel.live .slider { cursor: pointer; }
+  .slider.muted .fl { background: rgba(31,28,25,0.28); } .slider.muted .th { border-color: #9b948a; }
+  #panel .wide { width: 100%; padding: 9px; font-size: 13px; }
+  #panel .toggles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .tog { font: 500 12px 'Geist', sans-serif; padding: 7px 6px; border-radius: 7px; border: 1px solid #e0d9cf; background: #f3f0eb; color: var(--ink); }
+  .tog::before { content: '○ '; color: #8c857b; }
+  .tog.on { background: #e3e8f4; border-color: #c2cde6; } .tog.on::before { content: '● '; color: var(--blue); }
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); background: #efebe5; border: 1px solid #e0d9cf; border-radius: 8px; padding: 2px; }
+  .seg button { font: 500 12px 'Geist', sans-serif; border: 0; background: transparent; padding: 6px; border-radius: 6px; color: var(--ink); }
+  .seg button.on { background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+  #panel .foot { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  #hint { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); padding: 6px 12px 6px 10px; border-radius: 999px; opacity: 0;
+    font: 500 11.5px 'Geist', sans-serif; color: #3a342e; background: rgba(248,246,242,0.95); box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 6px 18px rgba(0,0,0,0.12); white-space: nowrap; }
+  #hint::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid #8c857b; margin-right: 7px; vertical-align: 0; }
+  #hint.btn { pointer-events: auto; cursor: pointer; }
+  #hint.pressed { background: #e6e1d9; }
+  .pressed { filter: brightness(0.9); }
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; color: #d8d2c8; font: 13px 'Geist Mono', monospace; background: #1a1612; transition: opacity .4s; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="ui">
+  <div id="grade"></div>
+  <svg id="svg"></svg>
+  <div id="labels"></div>
+  <div id="badge">0.25×</div>
+  <div id="panel">
+    <div class="ph"><span>Build it yourself</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#6d665d" stroke-width="1.3"><path d="M2.5 6h2.5l3.5-3v10l-3.5-3H2.5z"/><path d="M11 5.5c.8.7 1.2 1.6 1.2 2.5s-.4 1.8-1.2 2.5"/></svg></div>
+    <div class="stats" id="stats"></div>
+    <div class="sec">
+      <button class="btn primary wide" id="fire">Run</button>
+      <div class="toggles"><button class="tog" id="tSlow">Slow motion</button><button class="tog on" id="tPath">Paths</button></div>
+    </div>
+    <div id="params"></div>
+    <div class="sec">
+      <div class="row">SKETCH ↔ MODEL</div>
+      <div class="slider muted" id="slSketch"><div class="tr"></div><div class="fl"></div><div class="th"></div></div>
+      <div class="ends"><span>SKETCH</span><span>MODEL</span></div>
+    </div>
+    <div class="sec">
+      <div class="row">VIEW</div>
+      <div class="seg" id="views"><button data-v="hero" class="on">Hero</button><button data-v="side">Side</button><button data-v="top">Top</button></div>
+    </div>
+    <div class="foot"><button class="btn ghost" id="reset">Reset</button><button class="btn ghost" id="replay">Replay tour</button></div>
+  </div>
+  <div id="hint"></div>
+  <div id="card">
+    <div class="top mono"><span id="kick0"></span><span id="kick1"></span></div>
+    <h1 id="title"></h1>
+    <p id="subtitle"></p>
+    <div class="btns"><button class="btn primary" id="play">Play the tour</button><button class="btn ghost" id="build">Build it yourself</button></div>
+  </div>
+  <div id="bar">
+    <div id="track"><div id="fill"></div><div id="dot"></div></div>
+    <div id="clock"><b id="chapname">SKETCH</b><span id="time">0:00 / 0:45</span></div>
+    <svg class="icon" style="right:36px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2.5 6h2.5l3.5-3v10l-3.5-3H2.5z"/><path d="M11 5.5c.8.7 1.2 1.6 1.2 2.5s-.4 1.8-1.2 2.5M12.8 3.8c1.3 1.1 2 2.6 2 4.2s-.7 3.1-2 4.2"/></svg>
+    <svg class="icon" style="right:12px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+  </div>
+  <svg id="cursor" viewBox="0 0 20 20"><path d="M3 2l12.5 9.2-5.6.9 3.3 6.4-2.3 1.1-3.2-6.4-4.7 3.6z" fill="#fff" stroke="#111" stroke-width="1.1" stroke-linejoin="round"/></svg>
+</div>
+<div id="loading">drawing the machine…</div>
+<script type="module" src="/engine/src/main.js"></script>
+</body>
+</html>

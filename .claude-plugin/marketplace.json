@@ -3,12 +3,12 @@
   "owner": {
     "name": "misbahsy"
   },
-  "description": "The horizon-reel skill: short launch videos in the collage horizon style of Claude's model-launch films.",
+  "description": "Agent skills for launch and explainer films made with code: horizon-reel and sketch-to-sim.",
   "plugins": [
     {
-      "name": "horizon-reel",
+      "name": "animation-skills",
       "source": "./",
-      "description": "Short launch videos in the collage horizon style of Claude's model-launch films, from public-domain images and canvas drawing."
+      "description": "horizon-reel makes collage-horizon launch reels in the style of Claude's model-launch films; sketch-to-sim turns a pencil sketch of a machine into a physics-simulated film with a playable sandbox."
     }
   ]
 }
