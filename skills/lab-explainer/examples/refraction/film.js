@@ -24,6 +24,8 @@ export function derive(p, s) {
 }
 
 const deg = (v) => `${v.toFixed(1)}°`;
+const exitAngle = (th, n) => Math.asin(n * Math.sin(th * DEG)) / DEG;
+const critical = (n) => Math.asin(1 / n) / DEG;
 const pct = (v) => `${Math.round(v * 100)}%`;
 
 // ---- the film -----------------------------------------------------------------------
@@ -34,6 +36,16 @@ export const story = {
     theta: [[1.2, 2.2, 32], [7.6, 3.4, 40.5], [11.3, 1.1, 45], [13.9, 1.2, 38], [16.6, 1.4, 46], [21.2, 1.8, 18], [25.2, 1.4, 30]],
     n: [[15.2, 0.6, 1.333], [19.6, 0.6, 2.417], [24.6, 0.6, 1.5]],
   },
+  captions: [
+    [0.3, 3.4, 'Light leaving glass bends <span class="c">away from the normal</span>.'],
+    [3.7, 7.2, () => `The steeper it arrives, the more it bends: <b>${deg(32)}</b> in, <b>${deg(exitAngle(32, 1.5))}</b> out.`],
+    [7.8, 11.2, 'Near the critical angle, the exit beam skims the surface.'],
+    [11.5, 14.8, () => `Past <b>${deg(critical(1.5))}</b> nothing gets out: <span class="c">total internal reflection</span>.`],
+    [15.4, 19.0, () => `Water bends light less, so it traps light only past <b>${deg(critical(1.333))}</b>.`],
+    [19.8, 22.4, () => `Diamond bends it hardest: trapped past just <b>${deg(critical(2.417))}</b>.`],
+    [22.5, 24.9, 'That trapped light is what makes a diamond sparkle.'],
+    [25.2, 27.9, () => `Back in glass, <b>${deg(30)}</b> in comes out at <b>${deg(exitAngle(30, 1.5))}</b>.`],
+  ],
   shots: [
     { id: 'A', t0: 0, t1: 7, from: { pos: [92, 92, 128], target: [80, -1, -8] }, to: { pos: [84, 90, 124], target: [79, -1, -8] }, fov: 36, camK: 20, focus: C,
       labels: ['laser', 'normal', 'theta1', 'theta2', 'screen'],

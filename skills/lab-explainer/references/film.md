@@ -53,12 +53,25 @@ export const ui = {
   panel: [[{ label: 'FOCUS', hint: 'drag the ring · 1 2 3', width: 236, buttons: { param: 'sf', options: [['Foreground', 37], ['Middle', 54]] } },
            { label: 'DISTANCE', value: (s) => `${Math.round(s.p.sf)} cm`, slider: { at: (s) => 1 - 30 / s.p.sf } }]],
   theme: { accent: '#52d2f4', warm: '#f2a24e' },
+  scale: 1.3,          // the corner UI's size; labels get 1.15 times this unless labelScale is set
 };
 ```
 
 `intro` and `explain` are HTML. The engine joins every number to the unit after it with a non-breaking space, so "6.3 W" never wraps apart. In `explain`, `<span class="c">` is the accent colour (use it for the thing on the plane, the named effect), `<span class="o">` the warm colour (what goes wrong, the soft discs, the reflected share), and `<b>` white bold for numbers. Write it as two or three short sentences that change with the state; the reader sees it rewrite itself as the controls move, and that is half the lesson. Keep stats to three or four, each with a unit.
 
 The panel is rows of groups. A group has a `label`, an optional `hint` (a key or gesture, shown at the right of its header) or `value` (a live readout shown in the same place), and either `buttons` (`param`, `options` as `[label, value]`, `mono` for code-style labels) or a `slider` whose `at(s)` returns 0 to 1. `width` fixes a group's width in pixels; otherwise groups share the row. `icons: true` adds two small icon buttons after a group's buttons.
+
+## captions
+
+```js
+story.captions = [
+  [0.3, 4.4, 'A lens is sharp at only one distance: <span class="c">the plane of focus</span>.'],
+  [9.2, 13.9, () => `Close down to ƒ/16 and the sharp zone grows from <b>${cm(z(54, 2))}</b> to <b>${cm(z(54, 16))}</b>.`],
+  [21.1, 25.1, 'On the glass, sharp points stay points.', { top: true }],
+];
+```
+
+Captions are the part of the film people actually read: one short sentence at a time, large, centred at the bottom (or the top with `{ top: true }`), fading in and out. The corner UI is detail for anyone who pauses; the captions carry the explanation. Give every beat of the story one caption: what just changed and what it means, in one line of 40 to 65 characters. Leave it up for at least 1 second plus 1 second per 17 characters, start it just after the change it describes, and leave gaps between captions so the picture gets the viewer's eyes back. Numbers in captions come from the model like everything else: make the caption a function and compute them.
 
 ## blur (optional)
 

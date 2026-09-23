@@ -21,8 +21,9 @@
   #ui * { box-sizing: border-box; }
 
   #left { position: absolute; left: 25px; top: 20px; width: 440px; }
+  #left .kicker, #left .title, #left .intro { text-shadow: 0 0 2px rgba(4,6,10,0.9), 0 1px 14px rgba(4,6,10,0.85); }
   #left .kicker { font-size: 19px; font-weight: 800; letter-spacing: 0.015em; color: #f4f7fb; line-height: 1.05; }
-  #left .title { font-size: 35px; font-weight: 800; letter-spacing: -0.012em; color: var(--cyan); line-height: 1.0; margin-top: 1px; text-shadow: 0 0 18px color-mix(in srgb, var(--cyan) 25%, transparent); }
+  #left .title { font-size: 35px; font-weight: 800; letter-spacing: -0.012em; color: var(--cyan); line-height: 1.0; margin-top: 1px; }
   #left .intro { margin-top: 12px; font-size: 13px; line-height: 1.45; color: #d9e0ea; width: 312px; }
   .stats { display: flex; gap: 8px; margin-top: 15px; }
   .stat { min-width: 83px; padding: 6px 9px 7px; background: rgba(22,30,44,0.78); border: 1px solid var(--line); border-radius: 6px; }
@@ -53,6 +54,14 @@
   .tag .sub { font: 400 8.5px 'JetBrains Mono', monospace; color: #95a2b3; }
   .tag .sub:empty { display: none; }
 
+  /* captions: one short sentence at a time, big enough to read on a phone */
+  #caption { position: absolute; left: 50%; bottom: 58px; transform: translateX(-50%); max-width: 1180px; width: max-content; opacity: 0;
+    padding: 14px 28px 15px; border-radius: 14px; background: rgba(8,11,18,0.8); border: 1px solid rgba(255,255,255,0.09);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.45); backdrop-filter: blur(8px);
+    font: 600 34px/1.28 'Outfit', sans-serif; letter-spacing: -0.005em; color: #f3f6fa; text-align: center; }
+  #caption.top { top: 34px; bottom: auto; }
+  #caption .c { color: var(--cyan); } #caption .o { color: var(--orange); } #caption b { font-weight: 800; color: #fff; }
+
   #cursor { position: absolute; left: 0; top: 0; width: 24px; height: 24px; opacity: 0; }
   #grab { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; border: 1.5px solid rgba(255,255,255,0.85); border-radius: 50%; opacity: 0; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
 </style>
@@ -63,6 +72,7 @@
     <div id="left"></div>
     <div id="panel"></div>
     <div id="tags"></div>
+    <div id="caption"></div>
     <div id="cursor"><div id="grab"></div><svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 2 L3 19 L7.4 15 L10.3 21.6 L13.2 20.4 L10.4 13.9 L16.3 13.9 Z" fill="#111" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
   </div>
 </div>

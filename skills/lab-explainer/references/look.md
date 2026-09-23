@@ -4,7 +4,7 @@
 
 A dark navy room, never black. A charcoal console with a warm key light raking across it and a warm LED line along its top edge. The apparatus is black anodised metal and brass, with glass whose rims glow cyan. Glowing things are HDR emissives between 1 and 6, and they bloom. The background is always soft: backlit panels on the wall, a cabinet with glowing rings, a plant. Cyan is the colour of explanation (the UI accent, rims, rays, the slice glow) and warm orange is the colour of the mechanism and of warnings (the iris, LEDs, blur discs, reflected light). Red laser beams are the one exception, when the subject is a laser.
 
-The UI is quiet and small: Outfit for text, JetBrains Mono for numbers, dark translucent panels with hairline borders, tiny pill labels with a white dot. The title card is a small white kicker over a big accent-coloured title, then one or two lines of intro, three or four stat boxes, and the sentence box.
+The UI is quiet: Outfit for text, JetBrains Mono for numbers, dark translucent panels with hairline borders, pill labels with a white dot. The title card is a small white kicker over a big accent-coloured title, then one or two lines of intro, three or four stat boxes, and the sentence box. The reference was a screen recording of a web page, and its tiny text can't be read once the video is watched on a phone, so the engine scales the corner UI by 1.3 and the story is carried by captions: one large sentence at a time along the bottom. Judge legibility by looking at a still scaled to 640 pixels wide; if a caption can't be read there, shorten it rather than shrinking it.
 
 ## Composition that works
 

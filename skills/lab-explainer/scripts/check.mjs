@@ -20,5 +20,6 @@ for (const t of times) {
   const s = tl.stateAt(t); s.d = film.derive ? film.derive(s.p, s) : {};
   const p = Object.entries(s.p).map(([k, v]) => `${k}=${+v.toFixed(3)}`).join(' ');
   const st = (film.ui?.stats || []).map((x) => `${x.label}: ${val(x.value, s)}`).join(' | ');
-  console.log(`${t.toFixed(2).padStart(6)}s  ${s.shot.id.padEnd(2)} ${p}\n         ${st}\n         ${film.ui?.explain ? strip(film.ui.explain(s)) : ''}`);
+  const cap = (film.story.captions || []).filter(([a, b]) => t >= a && t < b).at(-1);
+  console.log(`${t.toFixed(2).padStart(6)}s  ${s.shot.id.padEnd(2)} ${p}\n         ${st}\n         ${film.ui?.explain ? strip(film.ui.explain(s)) : ''}${cap ? `\n  caption  ${strip(val(cap[2], s))}` : ''}`);
 }

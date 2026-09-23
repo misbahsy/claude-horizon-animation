@@ -59,6 +59,17 @@ export const story = {
     N: [[9.955, 1.02, 16], [12.95, 1.1, 2], [30.12, 1.29, 16]],
     exploded: [[26.95, 0.75, 0], [29.4, 0.75, 1]],
   },
+  // one short sentence at a time, timed to what is happening
+  captions: [
+    [0.3, 4.4, 'A lens is sharp at only one distance: <span class="c">the plane of focus</span>.'],
+    [4.6, 8.7, 'Turn the focus ring and the plane slides through the valley.'],
+    [9.2, 13.9, () => `Close down to ƒ/16 and the sharp zone grows from <b>${cm(sharpZone(54, 2).zone)}</b> to <b>${cm(sharpZone(54, 16).zone)}</b>.`],
+    [14.5, 17.9, 'Where the plane cuts the valley, everything is sharp.'],
+    [18.2, 20.7, () => `Farther away, it deepens to <b>${cm(sharpZone(86, 2).zone)}</b>.`],
+    [21.1, 25.1, 'On the glass, sharp points stay points; the rest become <span class="o">discs</span>.'],
+    [25.6, 30.0, 'Focus sets where the sharp slice is. Aperture sets how thick.'],
+    [30.3, 31.95, () => `At ƒ/16: <b>${cm(sharpZone(54, 16).zone)}</b> of sharp valley.`],
+  ],
   shots: [
     { id: 'A', t0: 0, t1: 8.75, from: { pos: [104, 58, 248], target: [80, 19, 0] }, to: { pos: [96, 57, 243], target: [77, 19, 0] }, fov: 34,
       field: 38, camK: 26, focus: [44, 26, 0], labels: OVERVIEW_LABELS,

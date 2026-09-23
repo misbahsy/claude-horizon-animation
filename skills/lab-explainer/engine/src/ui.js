@@ -7,8 +7,12 @@ const $ = (s) => document.querySelector(s);
 const val = (x, s) => (typeof x === 'function' ? x(s) : x);
 const h = (tag, cls, html = '') => { const e = document.createElement(tag); if (cls) e.className = cls; e.innerHTML = html; return e; };
 
-export function createUI(spec, labels = {}) {
+export function createUI(spec, labels = {}, captions = []) {
   const theme = spec.theme || {};
+  // The corner UI is drawn like a web page; scale it up so it survives being watched as a video.
+  const k = spec.scale ?? 1.3;
+  $('#left').style.transform = `scale(${k})`; $('#left').style.transformOrigin = '0 0';
+  $('#panel').style.transform = `scale(${k})`; $('#panel').style.transformOrigin = '100% 0';
   if (theme.accent) document.documentElement.style.setProperty('--cyan', theme.accent);
   if (theme.warm) document.documentElement.style.setProperty('--orange', theme.warm);
   const [kicker, title] = spec.title || ['', ''];
@@ -48,10 +52,11 @@ export function createUI(spec, labels = {}) {
 
   const tags = {};
   for (const [id, L] of Object.entries(labels)) {
-    const e = h('div', 'tag', `<span>${L.text}</span><span class="sub"></span>`); e.style.display = 'none'; $('#tags').append(e);
+    const e = h('div', 'tag', `<span>${L.text}</span><span class="sub"></span>`); e.style.display = 'none'; e.style.transform = `translate(-5px, -50%) scale(${spec.labelScale ?? k * 1.15})`; e.style.transformOrigin = '0 50%'; $('#tags').append(e);
     tags[id] = { L, e, sub: e.querySelector('.sub') };
   }
-  let lastExplain = '';
+  let lastExplain = '', lastCaption = '';
+  const cap = $('#caption');
 
   function update(s, { project, cursor }) {
     for (const { st, v } of statEls) v.textContent = val(st.value, s);
@@ -74,6 +79,15 @@ export function createUI(spec, labels = {}) {
       t.e.style.display = 'flex'; t.e.style.left = `${q.x}px`; t.e.style.top = `${q.y}px`;
       t.sub.textContent = t.L.sub ? val(t.L.sub, s) : '';
     }
+    // captions: [start, end, html or fn, { top }], fading in and out over 0.3 s
+    const c = captions.filter(([t0, t1]) => s.t >= t0 && s.t < t1).at(-1);
+    if (c) {
+      const [t0, t1, text, o = {}] = c, a = Math.min(1, (s.t - t0) / 0.3, (t1 - s.t) / 0.3);
+      const html = glue(val(text, s));
+      if (html !== lastCaption) { cap.innerHTML = html; lastCaption = html; }
+      cap.className = o.top ? 'top' : '';
+      cap.style.opacity = a; cap.style.transform = `translateX(-50%) translateY(${(1 - a) * (o.top ? -10 : 10)}px)`;
+    } else cap.style.opacity = 0;
     $('#cursor').style.opacity = cursor ? 1 : 0;
     if (cursor) { $('#cursor').style.transform = `translate(${cursor.x}px, ${cursor.y}px)`; $('#grab').style.opacity = cursor.grab; }
   }

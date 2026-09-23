@@ -33,6 +33,8 @@ node scripts/check.mjs <project>/film.js --every 0.5
 
 This prints every parameter, stat and sentence through the film. Read it all. Wrong numbers and clumsy sentences are cheap to fix here and expensive after a render.
 
+Write the captions with the story. The corner UI is small detail for anyone who pauses; the captions are the one large, timed sentence per beat that most viewers will actually read (`references/film.md`, captions).
+
 **4. Look at stills, then the blur.**
 
 ```bash

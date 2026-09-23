@@ -47,7 +47,7 @@ There are two examples. `examples/rube-goldberg/` is the machine in the preview.
 
 ![A laser swung past the critical angle of a glass block](docs/lab-explainer.gif)
 
-A film is a dark studio: a console with a control panel, and an apparatus that demonstrates one formula. A title card carries live stats and a sentence that rewrites itself from the numbers every frame. A control panel shows buttons being pressed and sliders moving, part labels float on the model, and the camera cuts between four or five setups while the scene answers each change the way the equation says it should. Rays, beams and planes are drawn from the same model as the numbers, and a depth-of-field pass can blur a scene the way an instrument inside it sees rather than the way the camera does.
+A film is a dark studio: a console with a control panel, and an apparatus that demonstrates one formula. A title card carries live stats and a sentence that rewrites itself from the numbers every frame. A control panel shows buttons being pressed and sliders moving, part labels float on the model, and the camera cuts between four or five setups while the scene answers each change the way the equation says it should. Timed captions carry the explanation one large sentence at a time, so the film reads on a phone. Rays, beams and planes are drawn from the same model as the numbers, and a depth-of-field pass can blur a scene the way an instrument inside it sees rather than the way the camera does.
 
 > Make a 30 second explainer on why light gets trapped in glass: a laser, a half-round block, the angle going past critical, then water and diamond.
 

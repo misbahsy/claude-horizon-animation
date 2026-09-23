@@ -33,7 +33,7 @@ const stateAt = (t, override) => { const s = timeline.stateAt(t); if (override) 
 const pipe = new Pipeline(renderer, W, H, { field: film.blur?.field || null, look });
 const kit = createKit({ renderer, scene, overlay, pipe, W, H, stateAt });
 const built = (await film.build(kit)) || {};
-const ui = createUI(film.ui || {}, built.labels || {});
+const ui = createUI(film.ui || {}, built.labels || {}, film.story.captions || []);
 const camera = new THREE.PerspectiveCamera(34, W / H, 2, 3000);
 
 const val = (x, s) => (typeof x === 'function' ? x(s) : x);
