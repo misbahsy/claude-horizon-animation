@@ -1,0 +1,10 @@
+{
+  "name": "lab-explainer",
+  "private": true,
+  "type": "module",
+  "description": "Formula-driven 3D explainer films rendered frame by frame.",
+  "dependencies": {
+    "three": "0.180.0",
+    "playwright-core": "^1.63.0"
+  }
+}

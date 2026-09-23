@@ -1,6 +1,6 @@
 # Claude animation skills
 
-Two agent skills for making short launch and explainer films with code. `horizon-reel` cuts together collage horizons in the style of Claude's model-launch films. `sketch-to-sim` turns a pencil sketch of a machine into a film: the drawing is read, lifts off the paper as a wooden model and runs under real physics. Both render frame by frame in headless Chromium, so the same input always gives the same film, and neither uses an image or video model.
+Three agent skills for making short launch and explainer films with code. `horizon-reel` cuts together collage horizons in the style of Claude's model-launch films. `sketch-to-sim` turns a pencil sketch of a machine into a film: the drawing is read, lifts off the paper as a wooden model and runs under real physics. `lab-explainer` builds a 3D explainer in which an apparatus on a lab bench demonstrates a formula, with every number on screen computed from the real equation. All three render frame by frame in headless Chromium, so the same input always gives the same film, and none uses an image or video model.
 
 ## horizon-reel
 
@@ -43,6 +43,25 @@ node scripts/serve.mjs examples/rube-goldberg/machine.js
 
 There are two examples. `examples/rube-goldberg/` is the machine in the preview. `examples/trebuchet/` is a counterweight trebuchet aimed at a block tower: it throws short at 0.48 kg and knocks the tower down at 0.68 kg.
 
+## lab-explainer
+
+![A laser swung past the critical angle of a glass block](docs/lab-explainer.gif)
+
+A film is a dark studio: a console with a control panel, and an apparatus that demonstrates one formula. A title card carries live stats and a sentence that rewrites itself from the numbers every frame. A control panel shows buttons being pressed and sliders moving, part labels float on the model, and the camera cuts between four or five setups while the scene answers each change the way the equation says it should. Rays, beams and planes are drawn from the same model as the numbers, and a depth-of-field pass can blur a scene the way an instrument inside it sees rather than the way the camera does.
+
+> Make a 30 second explainer on why light gets trapped in glass: a laser, a half-round block, the angle going past critical, then water and diamond.
+
+The agent fits the model and the story, writes one `film.js` holding the parameters, the equation, the timeline, the UI and the set, prints every number and sentence in Node to check them, looks at stills, then renders a 1080p60 MP4. By hand, from `skills/lab-explainer`:
+
+```bash
+node scripts/check.mjs examples/refraction/film.js --every 1
+node scripts/capture.mjs examples/refraction/film.js sheet.png --stills 4,10,16,22
+node scripts/capture.mjs examples/refraction/film.js film.mp4 --video --fps 60
+node scripts/serve.mjs examples/refraction/film.js
+```
+
+`examples/refraction/` is Snell's law and total internal reflection, with the reflected share from Fresnel's equations. `examples/plane-of-focus/` is a camera lens on an optical bench: its focus ring slides a plane of focus through a low-poly valley, a ground glass shows the lens's upside-down view, and the numbers are a real 50 mm lens.
+
 ## Install
 
 With the [skills CLI](https://github.com/vercel-labs/skills), for Claude Code, Codex or any other supported agent:
@@ -53,7 +72,7 @@ npx skills add misbahsy/claude-horizon-animation
 
 It asks which skills to install. `--skill sketch-to-sim` picks one, `-g` installs for your user rather than the current project, and `-a claude-code` or `-a codex` picks the agent without prompts.
 
-As a Claude Code plugin, which installs both:
+As a Claude Code plugin, which installs all three:
 
 ```
 /plugin marketplace add misbahsy/claude-horizon-animation
@@ -69,15 +88,15 @@ cd claude-horizon-animation && ./install.sh
 
 Add `--claude` or `--codex` to install for just one of them, and a skill name to install only that skill.
 
-Both skills need Node 18+ and `ffmpeg`. `horizon-reel` also needs `curl`. On first use, each skill runs its own `scripts/setup.mjs`, which installs its npm dependencies into the skill folder, downloads Chromium if none is present (about 95MB, once) and renders a smoke test. `sketch-to-sim` renders on the GPU. An 80 second film at 1080p60 takes about four minutes on an M1 Pro.
+All three skills need Node 18+ and `ffmpeg`. `horizon-reel` also needs `curl`. On first use, each skill runs its own `scripts/setup.mjs`, which installs its npm dependencies into the skill folder, downloads Chromium if none is present (about 95MB, once) and renders a smoke test. `sketch-to-sim` and `lab-explainer` render on the GPU. An 80 second `sketch-to-sim` film at 1080p60 takes about four minutes on an M1 Pro, and a 30 second `lab-explainer` film about seven.
 
 ## Rights
 
 `horizon-reel` downloads only public domain and CC0 photographs. `reel.credits.md` lists each one with its source page, and the preview's credits are in [docs/preview.credits.md](docs/preview.credits.md).
 
-`sketch-to-sim` uses no outside images. Its wood grain, paper, desk and window light are procedural, and its sounds are synthesised.
+`sketch-to-sim` and `lab-explainer` use no outside images. Their materials, textures and scenery are procedural, and `sketch-to-sim`'s sounds are synthesised.
 
-The bundled fonts are Source Serif 4, Newsreader, Geist, Geist Mono, Gochi Hand and Caveat. All are under the SIL Open Font License, and each licence sits beside its font.
+The bundled fonts are Source Serif 4, Newsreader, Geist, Geist Mono, Gochi Hand, Caveat, Outfit and JetBrains Mono. All are under the SIL Open Font License, and each licence sits beside its font.
 
 Bring your own music. Don't reuse the soundtrack from someone else's launch film.
 

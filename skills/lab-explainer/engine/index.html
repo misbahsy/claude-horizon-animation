@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab Explainer</title>
+<script type="importmap">
+{ "imports": {
+  "three": "/engine/node_modules/three/build/three.module.js",
+  "three/addons/": "/engine/node_modules/three/examples/jsm/"
+} }
+</script>
+<style>
+  @font-face { font-family: 'Outfit'; src: url(/engine/fonts/outfit.woff2) format('woff2'); font-weight: 100 900; }
+  @font-face { font-family: 'JetBrains Mono'; src: url(/engine/fonts/jetbrains-mono.woff2) format('woff2'); font-weight: 100 800; }
+  :root { --cyan: #52d2f4; --orange: #f2a24e; --text: #dde4ee; --dim: #8f9bab; --panel: rgba(19,25,36,0.86); --line: rgba(255,255,255,0.07); }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #07090d; font-family: 'Outfit', system-ui, sans-serif; color: var(--text); }
+  #stage { position: fixed; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; }
+  #stage canvas { display: block; width: 1920px; height: 1080px; }
+  #ui { position: absolute; inset: 0; pointer-events: none; }
+  #ui * { box-sizing: border-box; }
+
+  #left { position: absolute; left: 25px; top: 20px; width: 440px; }
+  #left .kicker { font-size: 19px; font-weight: 800; letter-spacing: 0.015em; color: #f4f7fb; line-height: 1.05; }
+  #left .title { font-size: 35px; font-weight: 800; letter-spacing: -0.012em; color: var(--cyan); line-height: 1.0; margin-top: 1px; text-shadow: 0 0 18px color-mix(in srgb, var(--cyan) 25%, transparent); }
+  #left .intro { margin-top: 12px; font-size: 13px; line-height: 1.45; color: #d9e0ea; width: 312px; }
+  .stats { display: flex; gap: 8px; margin-top: 15px; }
+  .stat { min-width: 83px; padding: 6px 9px 7px; background: rgba(22,30,44,0.78); border: 1px solid var(--line); border-radius: 6px; }
+  .stat .k { font: 500 8.5px 'JetBrains Mono', monospace; letter-spacing: 0.1em; color: var(--dim); text-transform: uppercase; white-space: nowrap; }
+  .stat .v { font: 500 15.5px 'JetBrains Mono', monospace; color: #fff; margin-top: 3px; white-space: nowrap; }
+  .stat .v.c { color: var(--cyan); }
+  #explain { margin-top: 11px; width: 296px; padding: 10px 12px 11px; background: rgba(15,21,32,0.8); border: 1px solid var(--line); border-radius: 8px; font-size: 12px; line-height: 1.52; color: #dfe5ee; }
+  #explain .c { color: var(--cyan); font-weight: 600; } #explain .o { color: var(--orange); font-weight: 600; } #explain b { color: #fff; font-weight: 700; }
+
+  #panel { position: absolute; right: 26px; top: 22px; width: 418px; padding: 11px 13px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 11px; box-shadow: 0 10px 40px rgba(0,0,0,0.35); }
+  #panel .row { display: flex; gap: 14px; }
+  #panel .col { display: flex; flex-direction: column; gap: 6px; }
+  #panel .head { display: flex; justify-content: space-between; align-items: baseline; font-size: 9.5px; font-weight: 700; letter-spacing: 0.13em; color: #c9d2de; }
+  #panel .head .hint { font: 400 9px 'JetBrains Mono', monospace; letter-spacing: 0.06em; color: #7f8b9c; }
+  #panel .seg { display: flex; gap: 2px; }
+  #panel .b { font: 500 12.5px 'Outfit', sans-serif; color: #d4dbe5; padding: 5px 9px 6px; border-radius: 7px; white-space: nowrap; }
+  #panel .b.m { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  #panel .icon { width: 25px; height: 25px; border-radius: 7px; background: rgba(255,255,255,0.08); display: grid; place-items: center; }
+  #panel .icon svg { width: 13px; height: 13px; }
+  .slider { position: relative; height: 26px; margin-top: 1px; }
+  .slider .track { position: absolute; left: 0; right: 0; top: 12px; height: 2px; background: rgba(255,255,255,0.14); border-radius: 2px; }
+  .slider .fill { position: absolute; left: 0; top: 12px; height: 2px; background: linear-gradient(90deg, color-mix(in srgb, var(--cyan) 20%, transparent), var(--cyan)); border-radius: 2px; box-shadow: 0 0 8px color-mix(in srgb, var(--cyan) 60%, transparent); }
+  .slider .tick { position: absolute; top: 17px; width: 1px; height: 4px; background: rgba(255,255,255,0.18); }
+  .slider .thumb { position: absolute; top: 5px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: #eef3f8; box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 18%, transparent), 0 0 12px color-mix(in srgb, var(--cyan) 50%, transparent); }
+
+  .tag { position: absolute; transform: translate(-5px, -50%); display: flex; align-items: center; gap: 5px; white-space: nowrap; font-size: 9.5px; font-weight: 600; color: #f1f5fa; background: rgba(9,13,20,0.84); border: 1px solid rgba(255,255,255,0.14); border-radius: 99px; padding: 2px 8px 2px 6px; }
+  .tag::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #fff; box-shadow: 0 0 5px #fff; }
+  .tag .sub { font: 400 8.5px 'JetBrains Mono', monospace; color: #95a2b3; }
+  .tag .sub:empty { display: none; }
+
+  #cursor { position: absolute; left: 0; top: 0; width: 24px; height: 24px; opacity: 0; }
+  #grab { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; border: 1.5px solid rgba(255,255,255,0.85); border-radius: 50%; opacity: 0; box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="ui">
+    <div id="left"></div>
+    <div id="panel"></div>
+    <div id="tags"></div>
+    <div id="cursor"><div id="grab"></div><svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 2 L3 19 L7.4 15 L10.3 21.6 L13.2 20.4 L10.4 13.9 L16.3 13.9 Z" fill="#111" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+  </div>
+</div>
+<script type="module" src="/engine/src/main.js"></script>
+</body>
+</html>

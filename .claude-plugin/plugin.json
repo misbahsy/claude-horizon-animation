@@ -1,7 +1,7 @@
 {
   "name": "animation-skills",
-  "description": "horizon-reel makes collage-horizon launch reels in the style of Claude's model-launch films; sketch-to-sim turns a pencil sketch of a machine into a physics-simulated film with a playable sandbox.",
-  "version": "0.2.0",
+  "description": "horizon-reel makes collage-horizon launch reels in the style of Claude's model-launch films; sketch-to-sim turns a pencil sketch of a machine into a physics-simulated film with a playable sandbox; lab-explainer makes formula-driven 3D explainer films on a lab bench.",
+  "version": "0.3.0",
   "author": { "name": "misbahsy" },
   "repository": "https://github.com/misbahsy/claude-horizon-animation"
 }
